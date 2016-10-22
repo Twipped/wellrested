@@ -1,6 +1,6 @@
 {
   "name": "wellrested",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A superagent wrapper library for creating preconfigured HTTP service clients",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,15 @@
   "engines": {
     "node": ">=4.2.0"
   },
-  "keywords": ["http", "rest", "superagent", "promise", "client", "soa", "services"],
+  "keywords": [
+    "http",
+    "rest",
+    "superagent",
+    "promise",
+    "client",
+    "soa",
+    "services"
+  ],
   "author": "Jarvis Badgley <chiper@chipersoft.com> (http://chipersoft.com/)",
   "license": "MIT",
   "dependencies": {
