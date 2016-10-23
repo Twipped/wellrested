@@ -207,3 +207,74 @@ test('bearer token', (t) => {
 
 	t.end();
 });
+
+test('deep endpoints and mixins', (t) => {
+
+	var config = {
+		baseUrl: 'http://example.com',
+		endpoints: {
+			'user': '/user/:username',
+			'user.messages': '/user/:username/messages',
+			orders: {
+				byId: '/order/:orderid',
+				byType: '/orders/type/:type',
+			},
+		},
+		mixins: {
+			user: {
+				getUser (username) {
+					return this.user.get({ username }).then();
+				},
+				getMessages (username) {
+					return this.user.messages.get({ username }).then();
+				},
+			},
+			'orders.getById': function (id) {
+				return this.orders.byId.get({ orderid: id }).then();
+			},
+			'orders.getByType': function (type) {
+				return this.orders.byType.get({ type }).then();
+			},
+		},
+	};
+
+	var client = wellrested(config);
+
+	t.afterEach((done) => {
+		nock.cleanAll();
+		done();
+	});
+
+	t.test('deep endpoints, nested mixins', (t) => {
+		nock(config.baseUrl)
+			.get('/user/USERNAME')
+			.reply(200, { ok: true });
+
+		return client.user.getUser('USERNAME').then((body) => {
+			t.deepEqual(body, { ok: true }, 'Got back the nocked response');
+		});
+	});
+
+	t.test('deep endpoints, nested mixins, part 2', (t) => {
+		nock(config.baseUrl)
+			.get('/user/USERNAME/messages')
+			.reply(200, { ok: true });
+
+		return client.user.getMessages('USERNAME').then((body) => {
+			t.deepEqual(body, { ok: true }, 'Got back the nocked response');
+		});
+	});
+
+	t.test('nested endpoints, deep mixins', (t) => {
+		nock(config.baseUrl)
+			.get('/orders/type/TYPE')
+			.reply(200, { ok: true });
+
+		return client.orders.getByType('TYPE').then((body) => {
+			t.deepEqual(body, { ok: true }, 'Got back the nocked response');
+		});
+	});
+
+
+	t.end();
+});

@@ -5,6 +5,8 @@ var compileurl = require('path-to-regexp').compile;
 var Promise    = require('bluebird');
 var request    = require('superagent');
 var assert     = require('assert');
+var get        = require('lodash.get');
+var set        = require('lodash.set');
 
 module.exports = exports = function (config) {
 	var options = Object.assign({
@@ -80,27 +82,47 @@ module.exports = exports = function (config) {
 		client[method] = (url, params) => client(method, url, params);
 	});
 
-	if (options.endpoints && typeof options.endpoints === 'object') {
-		Object.keys(options.endpoints).forEach((key) => {
-			var endpoint = options.endpoints[key];
-			assert(!client[key], `Cannot add endpoint "${key}", key already exists.`);
+	function buildEndpoints (trunk, endpoints) {
+		Object.keys(endpoints).forEach((key) => {
+			var endpoint = endpoints[key];
+			if (endpoint && typeof endpoint === 'object') {
+				if (!get(trunk, key)) set(trunk, key, {});
+				return buildEndpoints(get(trunk, key), endpoint);
+			}
+
+			assert(!get(trunk, key), `Cannot add endpoint "${key}", key already exists.`);
 			assert(endpoint, `No url was provided for the "${key}" endpoint`);
 
-			client[key] = (method, params) => client(method || 'get', endpoint, params);
+			var wrapper = (method, params) => client(method || 'get', endpoint, params);
 			options.methods.forEach((method) => {
-				client[key][method] = (params) => client(method, endpoint, params);
+				wrapper[method] = (params) => client(method, endpoint, params);
 			});
+
+			set(trunk, key, wrapper);
 		});
 	}
 
-	if (options.mixins && typeof options.endpoints === 'object') {
-		Object.keys(options.mixins).forEach((key) => {
-			var fn = options.mixins[key];
-			assert(!client[key], `Cannot add mixin "${key}", key already exists.`);
-			assert(typeof fn === 'function', `The "${key}" mixin is not a function.`);
+	if (options.endpoints && typeof options.endpoints === 'object') {
+		buildEndpoints(client, options.endpoints);
+	}
 
-			client[key] = fn.bind(client);
+	function applyMixins (trunk, mixins) {
+		Object.keys(mixins).forEach((key) => {
+			var mixin = mixins[key];
+			if (mixin && typeof mixin === 'object') {
+				if (!get(trunk, key)) set(trunk, key, {});
+				return applyMixins(get(trunk, key), mixin);
+			}
+
+			assert(!get(trunk, key), `Cannot add mixin "${key}", key already exists.`);
+			assert(typeof mixin === 'function', `The "${key}" mixin is not a function.`);
+
+			set(trunk, key, mixin.bind(client));
 		});
+	}
+
+	if (options.mixins && typeof options.mixins === 'object') {
+		applyMixins(client, options.mixins);
 	}
 
 	return client;
