@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "tap tests.js",
-    "test:coverage": "tap --coverage tests.js"
+    "test:coverage": "tap --coverage tests.js",
+    "lint": "eslint ./"
   },
   "engines": {
     "node": ">=4.2.0"
