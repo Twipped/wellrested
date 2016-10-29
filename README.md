@@ -1,6 +1,12 @@
 # WellRested
-===
+
 WellRested is a promise based client wrapper around [superagent](http://npm.im/superagent) and [path-to-regexp](http://npm.im/path-to-regexp) to create pre-configured clients for http services.
+
+[![NPM version](https://img.shields.io/npm/v/wellrested.svg)](http://badge.fury.io/js/wellrested)
+[![Licensed MIT](https://img.shields.io/npm/l/wellrested.svg)](https://github.com/ChiperSoft/wellrested/blob/master/LICENSE.txt)
+[![Nodejs 4+](https://img.shields.io/badge/node.js-%3E=_4 LTS-brightgreen.svg)](http://nodejs.org)
+[![Downloads](http://img.shields.io/npm/dm/wellrested.svg)](http://npmjs.org/wellrested)
+[![Build Status](https://img.shields.io/travis/ChiperSoft/wellrested.svg)](https://travis-ci.org/ChiperSoft/wellrested)
 
 
 ## Example
