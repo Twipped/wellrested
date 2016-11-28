@@ -28,7 +28,7 @@
     "lodash.get": "~4.4.2",
     "lodash.set": "~4.3.2",
     "path-to-regexp": "^1.6.0",
-    "superagent": "^2.3.0"
+    "superagent": "^3.1.0"
   },
   "devDependencies": {
     "eslint": "~3.11.0",
