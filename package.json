@@ -33,7 +33,7 @@
   "devDependencies": {
     "eslint": "~3.13.0",
     "eslint-config-chiper": "*",
-    "eslint-plugin-node": "~3.0.3",
+    "eslint-plugin-node": "~4.0.0",
     "eslint-plugin-promise": "~3.4.0",
     "nock": "~9.0.2",
     "tap": "~8.0.0"
