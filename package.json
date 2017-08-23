@@ -27,7 +27,7 @@
     "bluebird": "^3.4.6",
     "lodash.get": "~4.4.2",
     "lodash.set": "~4.3.2",
-    "path-to-regexp": "^1.6.0",
+    "path-to-regexp": "^2.0.0",
     "superagent": "^3.1.0"
   },
   "devDependencies": {
