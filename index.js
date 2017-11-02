@@ -51,8 +51,7 @@ module.exports = exports = function (config) {
 			});
 		}
 
-		req.end = () =>
-			(failure ? Promise.reject(failure) : Promise.fromCallback(originalEnd))
+		req.end = () => (failure ? Promise.reject(failure) : Promise.fromCallback(originalEnd))
 			.then((res) => {
 				options.logDebug(res);
 				return res;
