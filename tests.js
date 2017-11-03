@@ -85,7 +85,7 @@ test('request factories', (t) => {
 				() => t.fail('Request should have rejected'),
 				(err) => {
 					t.pass('Request failed');
-					t.equal(err.message, 'Expected "username" to be defined');
+					t.equal(err.message, 'Expected "username" to be a string');
 				}
 			);
 	});
