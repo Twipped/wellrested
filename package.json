@@ -21,7 +21,7 @@
     "soa",
     "services"
   ],
-  "author": "Jarvis Badgley <chiper@chipersoft.com> (http://chipersoft.com/)",
+  "author": "Jocelyn Badgley <joc@twipped.com>",
   "license": "MIT",
   "dependencies": {
     "bluebird": "~3.5.1",
@@ -52,9 +52,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ChiperSoft/wellrested.git"
+    "url": "https://github.com/Twipped/wellrested.git"
   },
   "bugs": {
-    "url": "https://github.com/ChiperSoft/wellrested/issues"
+    "url": "https://github.com/Twipped/wellrested/issues"
   }
 }
