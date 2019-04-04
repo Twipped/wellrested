@@ -10,7 +10,7 @@
     "lint": "eslint ./"
   },
   "engines": {
-    "node": ">=4.2.0"
+    "node": ">=8.10.0"
   },
   "keywords": [
     "http",
@@ -27,16 +27,16 @@
     "bluebird": "~3.5.1",
     "lodash.get": "~4.4.2",
     "lodash.set": "~4.3.2",
-    "path-to-regexp": "~2.1.0",
-    "superagent": "^3.1.0"
+    "path-to-regexp": "~3.0.0",
+    "superagent": "~5.0.2"
   },
   "devDependencies": {
-    "eslint": "~4.11.0",
+    "eslint": "~5.16.0",
     "eslint-config-chiper": "~2.2.0",
-    "eslint-plugin-node": "~5.2.1",
-    "eslint-plugin-promise": "~3.6.0",
-    "nock": "~9.1.0",
-    "tap": "~11.0.0"
+    "eslint-plugin-node": "~8.0.1",
+    "eslint-plugin-promise": "~4.1.1",
+    "nock": "~10.0.6",
+    "tap": "~12.6.1"
   },
   "files": [
     "index.js"
