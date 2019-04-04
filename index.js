@@ -2,7 +2,6 @@
 
 var { URL }    = require('url');
 var compileurl = require('path-to-regexp').compile;
-var Promise    = require('bluebird');
 var request    = require('superagent');
 var assert     = require('assert');
 var get        = require('lodash.get');
@@ -37,7 +36,6 @@ module.exports = exports = function (config) {
 		}
 
 		var req = request(method, url);
-		var originalEnd = req.end.bind(req);
 
 		if (options.auth && typeof options.auth === 'object' && options.auth.user && options.auth.pass) {
 			req.auth(options.auth.user, options.auth.pass);
@@ -51,24 +49,51 @@ module.exports = exports = function (config) {
 			});
 		}
 
-		req.end = () => (failure ? Promise.reject(failure) : Promise.fromCallback(originalEnd))
-			.then((res) => {
-				options.logDebug(res);
-				return res;
-			}, (err) => {
-				options.logError(err);
-				return Promise.reject(err);
-			});
+		var originalEnd = req.end.bind(req);
+		var originalThen = req.then.bind(req);
 
-		req.then = function then () {
-			var p = req.end().then(function onReqEnd (res) {
-				return res.body || res.text;
-			});
-
-			if (arguments.length) {
-				return p.then.apply(p, arguments);
+		req.end = (fn) => {
+			if (failure) {
+				options.logError(failure);
+				if (fn) return fn(failure);
+				return Promise.reject(failure);
 			}
 
+			return new Promise((resolve, reject) => {
+				originalEnd((err, res) => {
+					if (err) {
+						options.logError(err);
+						if (fn) return fn(failure);
+						return reject(err);
+					}
+
+					options.logDebug(res);
+					if (fn) return fn(null, res);
+					return resolve(res);
+				});
+			});
+		};
+
+		req.then = (...args) => {
+			if (failure) {
+				options.logError(failure);
+				return Promise.reject(failure).then(...args);
+			}
+
+			var p = originalThen();
+
+			p = p.then(
+				(res) => {
+					options.logDebug(res);
+					return res.body || res.text;
+				},
+				(err) => {
+					options.logError(err);
+					return Promise.reject(err);
+				}
+			);
+
+			if (args.length) p = p.then(...args);
 			return p;
 		};
 
