@@ -1,3 +1,6 @@
 {
-	"extends": "chiper/node4"
+	"extends": "twipped/node",
+	"rules": {
+		"promise/no-native": 0
+	}
 }
