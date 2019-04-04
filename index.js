@@ -1,6 +1,6 @@
 'use strict';
 
-var resolveurl = require('url').resolve;
+var { URL }    = require('url');
 var compileurl = require('path-to-regexp').compile;
 var Promise    = require('bluebird');
 var request    = require('superagent');
@@ -28,7 +28,7 @@ module.exports = exports = function (config) {
 			assert(!params || typeof params === 'object', 'Expected an object for params, found ' + typeof params);
 
 			if (~url.indexOf(':')) url = compileurl(url)(params || {});
-			if (options.baseUrl) url = resolveurl(options.baseUrl, url);
+			if (options.baseUrl) url = (new URL(url, options.baseUrl)).href;
 		} catch (e) {
 			// if any of the above fail, we need to save that
 			// failure and return it on the promise
