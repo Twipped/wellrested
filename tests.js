@@ -15,7 +15,7 @@ test('request factories', (t) => {
 		},
 		mixins: {
 			getUser (username) {
-				return this.user.get({ username }).then();
+				return this.user.get({ username });
 			},
 		},
 	};
@@ -27,7 +27,7 @@ test('request factories', (t) => {
 		done();
 	});
 
-	t.test('invoking client directly', (t) => {
+	t.only('invoking client directly', async (t) => {
 		nock(config.baseUrl, {
 			reqheaders: {
 				'Accepts': 'text/text',
@@ -36,43 +36,35 @@ test('request factories', (t) => {
 			.get('/foo/baz')
 			.reply(200, { ok: true });
 
-		return client('get', '/foo/:bar', { bar: 'baz' })
-			.end().then((res) => {
-				t.deepEqual(res.body, { ok: true }, 'Got back the nocked response');
-			});
+		var res = await client('get', '/foo/:bar', { bar: 'baz' }).end();
+
+		t.deepEqual(res.body, { ok: true }, 'Got back the nocked response');
 	});
 
-	t.test('invoking client method', (t) => {
+	t.test('invoking client method', async (t) => {
 		nock(config.baseUrl)
 			.get('/foo/baz')
 			.reply(200, { ok: true });
 
-		return client.get('/foo/:bar', { bar: 'baz' })
-			.then((body) => {
-				t.deepEqual(body, { ok: true }, 'Got back the nocked response');
-			});
+		var body = await client.get('/foo/:bar', { bar: 'baz' });
+		t.deepEqual(body, { ok: true }, 'Got back the nocked response');
 	});
 
-	t.test('invoking endpoint client', (t) => {
+	t.test('invoking endpoint client', async (t) => {
 		nock(config.baseUrl)
 			.get('/user/USERNAME')
 			.reply(200, { ok: true });
 
-		return client.user('get', { username: 'USERNAME' })
-			.then((body) => {
-				t.deepEqual(body, { ok: true }, 'Got back the nocked response');
-			});
+		t.deepEqual(await client.user('get', { username: 'USERNAME' }), { ok: true }, 'Got back the nocked response');
 	});
 
-	t.test('invoking endpoint method', (t) => {
+	t.test('invoking endpoint method', async (t) => {
 		nock(config.baseUrl)
 			.post('/message')
 			.reply(200, { ok: true });
 
-		return client.message.post()
-			.then((body) => {
-				t.deepEqual(body, { ok: true }, 'Got back the nocked response');
-			});
+
+		t.deepEqual(await client.message.post(), { ok: true }, 'Got back the nocked response');
 	});
 
 	t.test('invoking endpoint method without required param', (t) => {
@@ -90,15 +82,13 @@ test('request factories', (t) => {
 			);
 	});
 
-	t.test('invoking a mixin', (t) => {
+	t.test('invoking a mixin', async (t) => {
 		nock(config.baseUrl)
 			.get('/user/USERNAME')
 			.reply(200, { ok: true });
 
-		return client.getUser('USERNAME')
-			.then((body) => {
-				t.deepEqual(body, { ok: true }, 'Got back the nocked response');
-			});
+
+		t.deepEqual(await client.getUser('USERNAME'), { ok: true }, 'Got back the nocked response');
 	});
 
 	t.end();
@@ -122,7 +112,7 @@ test('basic auth', (t) => {
 		done();
 	});
 
-	t.test('performs a request with the correct basic auth', (t) => {
+	t.test('performs a request with the correct basic auth', async (t) => {
 		nock(config.baseUrl)
 			.put('/user/USERNAME')
 			.basicAuth({
@@ -131,10 +121,7 @@ test('basic auth', (t) => {
 			})
 			.reply(200, { ok: true });
 
-		return client.put('/user/USERNAME')
-			.then((body) => {
-				t.deepEqual(body, { ok: true }, 'Got back the nocked response');
-			});
+		t.deepEqual(await client.put('/user/USERNAME'), { ok: true }, 'Got back the nocked response');
 	});
 
 	t.test('performs a request with incorrect basic auth', (t) => {
@@ -170,7 +157,7 @@ test('bearer token', (t) => {
 		done();
 	});
 
-	t.test('performs a request with the correct auth token', (t) => {
+	t.test('performs a request with the correct auth token', async (t) => {
 		nock(config.baseUrl, {
 			reqheaders: {
 				'Authorization': 'Bearer ABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -179,10 +166,7 @@ test('bearer token', (t) => {
 			.patch('/user/USERNAME')
 			.reply(200, { ok: true });
 
-		return client.patch('/user/USERNAME')
-			.then((body) => {
-				t.deepEqual(body, { ok: true }, 'Got back the nocked response');
-			});
+		t.deepEqual(await client.patch('/user/USERNAME'), { ok: true }, 'Got back the nocked response');
 	});
 
 	t.test('performs a request with incorrect auth token', (t) => {
@@ -245,34 +229,29 @@ test('deep endpoints and mixins', (t) => {
 		done();
 	});
 
-	t.test('deep endpoints, nested mixins', (t) => {
+	t.test('deep endpoints, nested mixins', async (t) => {
 		nock(config.baseUrl)
 			.get('/user/USERNAME')
 			.reply(200, { ok: true });
 
-		return client.user.getUser('USERNAME').then((body) => {
-			t.deepEqual(body, { ok: true }, 'Got back the nocked response');
-		});
+
+		t.deepEqual(await client.user.getUser('USERNAME'), { ok: true }, 'Got back the nocked response');
 	});
 
-	t.test('deep endpoints, nested mixins, part 2', (t) => {
+	t.test('deep endpoints, nested mixins, part 2', async (t) => {
 		nock(config.baseUrl)
 			.get('/user/USERNAME/messages')
 			.reply(200, { ok: true });
 
-		return client.user.getMessages('USERNAME').then((body) => {
-			t.deepEqual(body, { ok: true }, 'Got back the nocked response');
-		});
+		t.deepEqual(await client.user.getMessages('USERNAME'), { ok: true }, 'Got back the nocked response');
 	});
 
-	t.test('nested endpoints, deep mixins', (t) => {
+	t.test('nested endpoints, deep mixins', async (t) => {
 		nock(config.baseUrl)
 			.get('/orders/type/TYPE')
 			.reply(200, { ok: true });
 
-		return client.orders.getByType('TYPE').then((body) => {
-			t.deepEqual(body, { ok: true }, 'Got back the nocked response');
-		});
+		t.deepEqual(await client.orders.getByType('TYPE'), { ok: true }, 'Got back the nocked response');
 	});
 
 
