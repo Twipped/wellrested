@@ -89,7 +89,7 @@ module.exports = exports = function (config) {
 				},
 				(err) => {
 					options.logError(err);
-					return Promise.reject(err);
+					throw err;
 				}
 			);
 

@@ -171,9 +171,9 @@ test('bearer token', (t) => {
 
 	t.test('performs a request with incorrect auth token', (t) => {
 		nock(config.baseUrl, {
-			badheaders: {
-				'Authorization': 'Bearer ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-			},
+			badheaders: [
+				'Authorization',
+			],
 		})
 			.patch('/user/USERNAME')
 			.basicAuth({
@@ -206,18 +206,18 @@ test('deep endpoints and mixins', (t) => {
 		},
 		mixins: {
 			user: {
-				getUser (username) {
-					return this.user.get({ username }).then();
+				async getUser (username) {
+					return await this.user.get({ username });
 				},
-				getMessages (username) {
-					return this.user.messages.get({ username }).then();
+				async getMessages (username) {
+					return await this.user.messages.get({ username });
 				},
 			},
-			'orders.getById': function (id) {
-				return this.orders.byId.get({ orderid: id }).then();
+			'orders.getById': async function (id) {
+				return await this.orders.byId.get({ orderid: id });
 			},
-			'orders.getByType': function (type) {
-				return this.orders.byType.get({ type }).then();
+			'orders.getByType': async function (type) {
+				return await this.orders.byType.get({ type });
 			},
 		},
 	};
