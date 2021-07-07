@@ -1,4 +1,14 @@
 
+3.0.0 / 2021-07-07
+==================
+
+  * Breaking Changes:
+
+    - Updated Superagent to version 6
+    - Now requires Node 12
+
+  * Removed ancient Lodash dependencies
+
 2.0.0 / 2019-04-04
 ==================
 
