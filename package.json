@@ -25,15 +25,15 @@
   "license": "MIT",
   "dependencies": {
     "path-to-regexp": "~6.2.0",
-    "superagent": "~6.1.0"
+    "superagent": "~7.1.1"
   },
   "devDependencies": {
-    "eslint": "~7.30.0",
-    "eslint-config-twipped": "~4.0.0",
+    "eslint": "~8.8.0",
+    "eslint-config-twipped": "~6.1.0",
     "eslint-plugin-node": "~11.1.0",
-    "eslint-plugin-promise": "~5.1.0",
-    "nock": "~13.1.1",
-    "tap": "~15.0.9"
+    "eslint-plugin-promise": "~6.0.0",
+    "nock": "~13.2.4",
+    "tap": "~15.1.6"
   },
   "files": [
     "index.js"
@@ -46,6 +46,9 @@
       "lcov",
       "text"
     ]
+  },
+  "tap": {
+    "check-coverage": false
   },
   "repository": {
     "type": "git",
