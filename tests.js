@@ -121,6 +121,39 @@ test('data encoding', (t) => {
   t.end();
 });
 
+test('body content type', (t) => {
+
+  var config = {
+    baseUrl: 'http://example.com',
+  };
+
+  var client = wellrested(config);
+
+  t.afterEach(async () => {
+    nock.cleanAll();
+  });
+
+  t.test('performs a request with the correct basic auth', async (t) => {
+    nock(config.baseUrl, {
+      reqheaders: {
+        'content-type': 'application/json',
+      },
+    })
+      .post('/test')
+      .reply(200, { ok: true });
+
+    const res = await client
+      .post('/test')
+      .send({
+        foo: true,
+      });
+
+    t.same(res, { ok: true }, 'Got back the nocked response');
+  });
+
+  t.end();
+});
+
 test('basic auth', (t) => {
 
   var config = {

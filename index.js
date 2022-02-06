@@ -138,7 +138,7 @@ module.exports = exports = function (config) {
         (err) => {
           options.logError(err);
           throw err;
-        }
+        },
       );
 
       if (args.length) p = p.then(...args);
