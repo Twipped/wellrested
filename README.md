@@ -8,6 +8,13 @@ WellRested is a promise based client wrapper around [superagent](http://npm.im/s
 [![Downloads](http://img.shields.io/npm/dm/wellrested.svg)](http://npmjs.org/wellrested)
 [![Build Status](https://img.shields.io/travis/ChiperSoft/wellrested.svg)](https://travis-ci.org/ChiperSoft/wellrested)
 
+## Installation
+
+WellRested requires superagent 7.1 or later be installed alongside.
+
+```
+npm install superagent wellrested
+```
 
 ## Example
 
