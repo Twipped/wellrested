@@ -1,4 +1,11 @@
 
+4.0.0 / 2022-02-06
+==================
+
+  * Breaking Change:
+
+    - Superagent is now a required peer dependency. This will enable wellrested to stay up to date with SA changes.
+
 3.0.0 / 2021-07-07
 ==================
 
